@@ -1,0 +1,18 @@
+Package: geoTS
+Version: 0.0.0.9000
+Date: 2019-05-09
+Title: Time Series Methods for Analyzing Remote Sensing Products
+Authors@R: person("Inder", "Tecuapetla-Gómez", 
+  email = "itecuapetla@conabio.gob.mx",
+  role = c("aut", "cre"))
+Author: Inder Tecuapetla-Gómez [aut, cre]
+Maintainer: Inder Tecuapetla-Gómez
+        <itecuapetla@conabio.gob.mx>
+Description: Provides a series of time series methods which allow 
+             a semi-automatic analysis of diverse remote sensing products.
+License: GPL (>=2)
+Encoding: UTF-8
+Depends: R (>= 2.15.3)
+Imports: raster, ff, glmnet, flare, Matrix, sp
+NeedsCompilation: no
+RoxygenNote: 6.1.1
