@@ -11,6 +11,8 @@ such as
   **haRmonics**: Fits harmonic regression models (with homo- and heteroscedastic errors), 
   that is, computes amplitudes and phase angles. The popular method [HANTS](https://www.asprs.org/pers-archives-of-the-past?a_tag=2001&a_category=Apr&submit=GO)
   by Jakubauskas, Legates and Kastens is also implemented.
+  
+  **hetervar**: Estimation of heteroscedastic variance for remotely-sensed time series
 
 ## Installation
 ``` r
