@@ -2,36 +2,49 @@
 % Please edit documentation in R/transfer_raster_RData.R
 \name{transfer_raster_RData}
 \alias{transfer_raster_RData}
-\title{Transfer the values of a RasterStack into an RData file}
+\title{Transfer values from a Raster* object to an RData file}
 \usage{
-transfer_raster_RData(inputFile, outputFile, vmode = c("integer",
-  "single", "double"))
+transfer_raster_RData(
+  inputFile,
+  outputPath,
+  vmode = c("integer", "single", "double")
+)
 }
 \arguments{
-\item{inputFile}{a character vector with full path name of input file}
+\item{inputFile}{character with full path name of input file.}
 
-\item{outputFile}{a character vector with full path name (where the \code{RData} file will be saved). 
-Do not include the extension .RData}
+\item{outputPath}{character with full path name (where the \code{RData} file will be saved). 
+Do not include the extension .RData.}
 
 \item{vmode}{a character specifying the type of virtual storage mode \code{\link[ff]{vmode}} 
 needed. Only \code{integer}, \code{single} and \code{double} are
-allowed}
+allowed.}
 }
 \value{
-At the designated path (\code{outputFile}) the user will find an \code{.RData} file
+At the designated path (\code{outputPath}) the user will find an \code{RData} file.
 }
 \description{
-Get the values of a Raster* and transfer them into an RData file in an 
-\code{\link[base]{array}} format which allows for compatibility with multiple 
-R functions as well as great portability.
+Get the values of a Raster*, storage them into  an \code{\link[base]{array}} and
+finally save the array in an RData  which allows for compatibility with multiple 
+\code{R} functions as well as great portability.
 }
 \details{
 Prior to embark the user in a transfer that may not be successful due to the
-lack of RAM, \code{transfer_raster_RData} provides an estimate of the amount of bytes to be used
+lack of RAM, this function provides an estimate of the amount of bytes to be used
 in the transfer process. The estimate is obtained by multiplying the number of rows by the number of 
-columns of the first layer of \code{inputFile} by its number of layers by the amount of 
-bites used by \code{vmode} (32-bit float for \code{integer} or \code{single} and 64-bit float for \code{double}). 
-Should the user decide not to continue with the importation \code{transfer_raster_RData} returns the message \code{"Did not transfer anything"}.
+columns by the number of layers of the Raster* object to transfer by the amount of 
+bites used by \code{vmode} (32-bit float for \code{integer} or \code{single} and 
+64-bit float for \code{double}). Should the user decide not to continue with the 
+importation \code{transfer_raster_RData} returns the message \code{"Did not transfer anything"}.
+}
+\examples{
+\donttest{
+inputFile = system.file("extdata", "master.tif", package = "geoTS")
+outputPath = paste0(system.file("extdata", package = "geoTS"), "/test")
+transfer_raster_RData(inputFile = inputFile, outputPath = outputPath, 
+vmode = "single")
+}
+
 }
 \seealso{
 \code{\link[ff]{vmode}}

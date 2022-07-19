@@ -7,14 +7,14 @@
 maxLagMissVal(x, type = c("NA", "numeric"), value)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{numeric vector.}
 
 \item{type}{character specifying the type of missing value to consider. Default is 
-\code{type = "NA"}; when \code{type == "numeric"}, \code{value} must be provided}
+\code{type = "NA"}; when \code{type == "numeric"}, \code{value} must be provided.}
 
-\item{value}{numeric giving a figure to be considered as a missing value; often as part
-of a pre-processing missing values in a dataset (vector, time series, etc.)
-are fill in with pre-established values}
+\item{value}{numeric giving a figure to be used to fill missing values; often as part
+of a pre-processing, missing values in a dataset (vector, time series, etc.)
+are fill in with pre-established values.}
 }
 \value{
 A list containing:
@@ -24,7 +24,7 @@ A list containing:
 }
 \description{
 This function computes the maximum amount of consecutive missing values in a vector.
-This quantity is also know as maximum lag, run, or record, and can be used as a
+This quantity is also known as maximum lag, run, or record, and can be used as a
 rough estimate of the quality of a dataset.
 }
 \examples{
@@ -35,7 +35,7 @@ v <- c(NA, 0.12, 0.58, 0.75, NA, NA, NA, 0.46, 0.97, 0.39,
 maxLagMissVal(x=v, type="NA")
 
 w <- c(23,3,14,3,8,3,3,3,3,3,3,3,10,14,15,3,10,3,3,6)
-maxLagMissVal(x=w, type = "numeric", value = 3)
+maxLagMissVal(x = w, type = "numeric", value = 3)
        
 }
 \seealso{

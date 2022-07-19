@@ -2,38 +2,58 @@
 % Please edit documentation in R/transfer_bin_raster.R
 \name{transfer_bin_raster}
 \alias{transfer_bin_raster}
-\title{Transfer values of a binary into a raster file}
+\title{Transfer values from a binary image file to a raster file}
 \usage{
-transfer_bin_raster(inputPath, outputPath, masterFile, what = integer(),
-  signed = T, endian = "little", size = 2, format = "GTiff",
-  dataType = "INT2S", overwrite = T)
+transfer_bin_raster(
+  inputPath,
+  outputPath,
+  master,
+  what = integer(),
+  signed = TRUE,
+  endian = "little",
+  size = 2,
+  format = "GTiff",
+  dataType = "INT2S",
+  overwrite = TRUE
+)
 }
 \arguments{
-\item{inputPath}{character with full path name of input file(s). A list of files is also allowed.}
+\item{inputPath}{character with full path name of input file(s).}
 
 \item{outputPath}{character with full path name (where the raster files will be saved).}
 
-\item{masterFile}{character with full path name of a raster file with basic specifications (such
-as extent and projections) to be used in the transfer process.}
+\item{master}{character with full path name of a raster file; extent and projection
+of this file are applied to this function output.}
 
 \item{what}{See \code{\link[base]{readBin}}. Default \code{integer()}.}
 
-\item{signed}{See \code{\link[base]{readBin}}. Default \code{T}.}
+\item{signed}{See \code{\link[base]{readBin}}. Default \code{TRUE}.}
 
 \item{endian}{See \code{\link[base]{readBin}}. Default \code{"little"}.}
 
-\item{size}{integer, number of bytes per element in the byte stream, default 2. See \code{\link[base]{readBin}}}
+\item{size}{integer, number of bytes per element in the byte stream, default 2. See \code{\link[base]{readBin}}.}
 
 \item{format}{character, output file type. See \code{\link[raster]{writeFormats}}.}
 
 \item{dataType}{character, output data type. See \code{\link[raster]{dataType}}.}
 
-\item{overwrite}{logical, default \code{T}, should the resulting raster be overwritten.}
+\item{overwrite}{logical, default \code{TRUE}, should the resulting raster be overwritten.}
 }
 \value{
-At the designated path (\code{outputFile}) the user will find an \code{RData} file
+At the designated path (\code{outputPath}) the user will find \code{TIF} file(s).
 }
 \description{
-Get the values of a binary file and transfer them into a raster file. All formats
+Get the values of a binary file (in integer format) and transfer them to a raster file. All formats
 considered in \code{\link[raster]{writeRaster}} are allowed.
+}
+\examples{
+\donttest{
+inputPath = system.file("extdata", package = "geoTS")
+masterFile = system.file("extdata", "master.tif", package = "geoTS") 
+transfer_bin_raster(inputPath = inputPath, outputPath = inputPath, 
+                    master = masterFile, what = integer(),
+                    signed = TRUE, endian = "little", size = 2,
+                    format = "GTiff", dataType = "INT2S", overwrite = TRUE)
+}
+
 }
