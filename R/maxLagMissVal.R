@@ -1,15 +1,16 @@
 #' Get maximum lag of missing values
 #' 
 #' This function computes the maximum amount of consecutive missing values in a vector.
-#' This quantity is also know as maximum lag, run, or record, and can be used as a
+#' This quantity is also known as maximum lag, run, or record, and can be used as a
 #' rough estimate of the quality of a dataset.
 #' 
-#' @param     x numeric vector
+#' @param     x numeric vector.
 #' @param  type character specifying the type of missing value to consider. Default is 
-#'              \code{type = "NA"}; when \code{type == "numeric"}, \code{value} must be provided
-#' @param value numeric giving a figure to be considered as a missing value; often as part
-#'              of a pre-processing missing values in a dataset (vector, time series, etc.)
-#'              are fill in with pre-established values
+#'              \code{type = "NA"}; when \code{type == "numeric"}, \code{value} must be provided.
+#' @param value numeric giving a figure to be used to fill missing values; often as part
+#'              of a pre-processing, missing values in a dataset (vector, time series, etc.)
+#'              are fill in with pre-established values.
+#'              
 #' @export
 #' 
 #' @examples
@@ -20,7 +21,7 @@
 #' maxLagMissVal(x=v, type="NA")
 #' 
 #' w <- c(23,3,14,3,8,3,3,3,3,3,3,3,10,14,15,3,10,3,3,6)
-#' maxLagMissVal(x=w, type = "numeric", value = 3)
+#' maxLagMissVal(x = w, type = "numeric", value = 3)
 #'        
 #' @seealso \code{\link[base]{rle}}
 #' 
@@ -32,13 +33,13 @@
 maxLagMissVal <- function(x, type = c("NA", "numeric"), value){
   type <- match.arg(type)
   
-  flag <- F
+  flag <- FALSE
   
   if(type == "numeric"){
     if( missing(value) ){
       stop("When type is numeric, value must be passed")
     } else {
-      flag <- T
+      flag <- TRUE
       xCopy <- x
       x[x==value] <- NA
     }
@@ -46,10 +47,10 @@ maxLagMissVal <- function(x, type = c("NA", "numeric"), value){
   
   is.na.rle <- rle(is.na(x))
   ind <- 1:length(is.na.rle$values)
-  temp <- ind[is.na.rle$values == T]
+  temp <- ind[is.na.rle$values == TRUE]
   output <- ifelse(length(temp) != 0, max(is.na.rle$lengths[temp]), 0)
   
-  if(flag == F){
+  if(flag == FALSE){
     xOutput <- x
     valueOutput <- NA
   } else {

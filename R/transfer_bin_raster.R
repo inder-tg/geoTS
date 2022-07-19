@@ -1,21 +1,31 @@
-#' Transfer values of a binary into a raster file
+#' Transfer values from a binary image file to a raster file
 #'
-#' Get the values of a binary file and transfer them into a raster file. All formats
+#' Get the values of a binary file (in integer format) and transfer them to a raster file. All formats
 #' considered in \code{\link[raster]{writeRaster}} are allowed.
 #' 
-#' @param inputPath  character with full path name of input file(s). A list of files is also allowed.
+#' @param inputPath  character with full path name of input file(s).
 #' @param outputPath character with full path name (where the raster files will be saved). 
-#' @param masterFile character with full path name of a raster file with basic specifications (such
-#'                   as extent and projections) to be used in the transfer process.
+#' @param master     character with full path name of a raster file; extent and projection
+#'                   of this file are applied to this function output.        
 #' @param what       See \code{\link[base]{readBin}}. Default \code{integer()}.
-#' @param signed     See \code{\link[base]{readBin}}. Default \code{T}.
+#' @param signed     See \code{\link[base]{readBin}}. Default \code{TRUE}.
 #' @param endian     See \code{\link[base]{readBin}}. Default \code{"little"}.
-#' @param size       integer, number of bytes per element in the byte stream, default 2. See \code{\link[base]{readBin}}
+#' @param size       integer, number of bytes per element in the byte stream, default 2. See \code{\link[base]{readBin}}.
 #' @param format     character, output file type. See \code{\link[raster]{writeFormats}}.
 #' @param dataType   character, output data type. See \code{\link[raster]{dataType}}.
-#' @param overwrite  logical, default \code{T}, should the resulting raster be overwritten.
+#' @param overwrite  logical, default \code{TRUE}, should the resulting raster be overwritten.
 #' 
 #' @export
+#' 
+#' @examples
+#' \donttest{
+#' inputPath = system.file("extdata", package = "geoTS")
+#' masterFile = system.file("extdata", "master.tif", package = "geoTS") 
+#' transfer_bin_raster(inputPath = inputPath, outputPath = inputPath, 
+#'                     master = masterFile, what = integer(),
+#'                     signed = TRUE, endian = "little", size = 2,
+#'                     format = "GTiff", dataType = "INT2S", overwrite = TRUE)
+#' }
 #' 
 #' @importFrom utils setTxtProgressBar
 #' @importFrom utils txtProgressBar
@@ -25,44 +35,24 @@
 #' @importFrom raster nlayers
 #' @importFrom raster raster
 #' @importFrom raster writeRaster
-#' @importFrom raster rasterToPoints
-#' @importFrom raster projection
 #' 
-#' @return At the designated path (\code{outputFile}) the user will find an \code{RData} file
+#' @return At the designated path (\code{outputPath}) the user will find \code{TIF} file(s).
 #' 
-transfer_bin_raster <- function(inputPath, outputPath, masterFile, what = integer(),
-                                signed = T, endian = "little", size = 2,
-                                format = "GTiff", dataType = "INT2S", overwrite = T){
+transfer_bin_raster <- function(inputPath, outputPath, master, what = integer(),
+                                signed = TRUE, endian = "little", size = 2,
+                                format = "GTiff", dataType = "INT2S", overwrite = TRUE){
   
-  if(missing(inputPath)){
-    stop("inputPath must be provided")
+  if(missing(inputPath) | missing(outputPath)){
+    stop("inputPath and outputPath must be provided")
   }
   
-  if(missing(outputPath)){
-    stop("outputPath must be provided")
-  }
+  listFilesBin <- list.files(path = inputPath, pattern = ".bin", full.names = TRUE)
+  listFilesBinTemp <- list.files(path = inputPath, pattern = ".bin")
   
-  # if(length(inputPath) == 1){
-  #   listFilesBin <- inputPath
-  #   listFilesBinTemp <- inputPath
-  # } 
-  
-  # inputPath = "/home/Desktop/posgradosUNAM/GEOGRAFIA/2018_TS/geoTS/data/site_BajaNorte_BIN"
-  # outputPath = "/home/Desktop/posgradosUNAM/GEOGRAFIA/2018_TS/geoTS/data/site_BajaNorte_TIF"
-  # dirBajaNorte <- "/home/itecuapetla/Desktop/posgradosUNAM/R/timeSeries/site_BajaNorte" #  paste(rootDir, "/data/site_QRoo", sep = "" )
-  # masterFile <- raster(paste0(dirBajaNorte, "/master_BajaNorte.tif"))
-  # masterFile = masterFile
-  # size = 2
-  
-  # if(length(inputPath) > 1){
-    listFilesBin <- list.files(path = inputPath, pattern = ".bin", full.names = T)
-    listFilesBinTemp <- list.files(path = inputPath, pattern = ".bin")
-  # }
-  
-  if(missing(masterFile)){
+  if(missing(master)){
     stop("masterFile must be provided")
   } else {
-    masterFile <- raster(masterFile)
+    masterFile <- raster(master)
   }
   
   nRow <- nrow(masterFile)
@@ -71,7 +61,7 @@ transfer_bin_raster <- function(inputPath, outputPath, masterFile, what = intege
   x <- 1:nCol
   y <- 1:nRow
   
-  cat("Started at:", as.character(Sys.time()[1]), "\n")
+  message(paste0("Started at: ", as.character(Sys.time()[1])))
   
   pBar <- txtProgressBar(min = 0, max = length(listFilesBin), style = 3)
   for(i in 1:length(listFilesBin)) {
@@ -79,7 +69,7 @@ transfer_bin_raster <- function(inputPath, outputPath, masterFile, what = intege
     
     to.read <- file(listFilesBin[i], "rb")
     for(r in 1:nRow){
-      imagen[r,] <- readBin(to.read, what = what, n = nCol, signed = T, size = size, endian = endian)
+      imagen[r,] <- readBin(to.read, what = what, n = nCol, signed = TRUE, size = size, endian = endian)
     }
     close(to.read)
     
@@ -90,23 +80,7 @@ transfer_bin_raster <- function(inputPath, outputPath, masterFile, what = intege
   }
   close(pBar)
   
-  cat("Finished at:", as.character(Sys.time()[1]), "\n")
+  message(paste0("Finished at: ", as.character(Sys.time()[1])))
 }
 #
 rotate <- function(x) t(apply(x, 2, rev))
-#
-matrixToRaster <- function(matrix, raster){
-  rasterTable <- data.frame(rasterToPoints(raster)) 
-  
-  df <- data.frame(x = rasterTable$x, y = rasterTable$y, values = c(matrix))
-  
-  sp::coordinates(df) <- ~ x + y
-  
-  sp::gridded(df) <- TRUE
-  
-  raster_df <- raster(df)
-  
-  raster::projection(raster_df) <- projection(raster)
-  
-raster_df
-}

@@ -1,18 +1,25 @@
 Package: geoTS
-Version: 0.0.0.9000
-Date: 2019-05-09
-Title: Time Series Methods for Analyzing Remote Sensing Products
+Version: 0.1.6
+Date: 2022-07-18
+Title: Methods for Handling and Analyzing Time Series of Satellite
+        Images
 Authors@R: person("Inder", "Tecuapetla-Gómez", 
   email = "itecuapetla@conabio.gob.mx",
   role = c("aut", "cre"))
 Author: Inder Tecuapetla-Gómez [aut, cre]
 Maintainer: Inder Tecuapetla-Gómez
-        <itecuapetla@conabio.gob.mx>
-Description: Provides a series of time series methods which allow 
-             a semi-automatic analysis of diverse remote sensing products.
+ <itecuapetla@conabio.gob.mx>
+Description: Provides functions and methods for: splitting large raster objects
+             into smaller chunks, transferring images from a binary format into raster 
+             layers, transferring raster layers into an 'RData' file, calculating the 
+             maximum gap (amount of consecutive missing values) of a numeric vector, 
+             and fitting harmonic regression models to periodic time series. The homoscedastic
+             harmonic regression model is based on G. Roerink, M. Menenti and W. Verhoef (2000) <doi:10.1080/014311600209814>.
+LazyData: yes
 License: GPL (>=2)
 Encoding: UTF-8
-Depends: R (>= 2.15.3)
-Imports: raster, ff, glmnet, flare, Matrix, sp
+Depends: ff (>= 2.2-14), raster (>= 2.9-5), foreach (>= 1.4.4),
+        parallel (>= 3.6.1), robustbase (>= 0.95-0), R (>= 2.15.3)
+Imports: methods, sp (>= 1.2-0), doParallel (>= 1.0.14), iterators (>=
+        1.0.10)
 NeedsCompilation: no
-RoxygenNote: 6.1.1
